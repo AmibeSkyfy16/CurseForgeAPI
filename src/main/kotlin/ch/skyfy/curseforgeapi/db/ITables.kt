@@ -1,6 +1,9 @@
+@file:Suppress("unused")
+
 package ch.skyfy.curseforgeapi.db
 
 import org.ktorm.entity.Entity
+import java.time.Instant
 import java.time.LocalDateTime
 
 interface Asset : Entity<Asset> {
@@ -18,7 +21,7 @@ interface Game : Entity<Game> {
     val id: Int
     val name: String
     val slug: String
-    val dateModified: LocalDateTime
+    val dateModified: Instant
     val status: Int
     val apiStatus: Int
 
@@ -53,7 +56,7 @@ interface Category : Entity<Category> {
     val slug: String
     val url: String
     val iconUrl: String
-    val dateModified: LocalDateTime
+    val dateModified: Instant
     val isClass: Boolean
     val displayIndex: Int
 
@@ -125,9 +128,9 @@ interface Mod : Entity<Mod> {
     val status: Int
     val downloadCount: Int
     val isFeatured: Boolean
-    val dateCreated: LocalDateTime
-    val dateModified: LocalDateTime
-    val dateReleased: LocalDateTime
+    val dateCreated: Instant
+    val dateModified: Instant
+    val dateReleased: Instant
     val allowModDistribution: Boolean
     val gamePopularityRank: Int
     val isAvailable: Boolean
@@ -148,7 +151,7 @@ interface File : Entity<File> {
     val fileName: String
     val releaseType: Int
     val fileStatus: Int
-    val fileDate: LocalDateTime
+    val fileDate: Instant
     val fileLength: Int
     val downloadCount: Int
     val downloadUrl: String

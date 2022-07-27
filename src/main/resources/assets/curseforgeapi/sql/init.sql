@@ -98,6 +98,33 @@ create table if not exists `module`
     fingerprint int
     );
 
+create table if not exists `mod`
+(
+    id int auto_increment primary key,
+    game_id int,
+    logo_id int,
+    link_id int,
+    primary_category int,
+    class_id int,
+    name varchar(512),
+    slug varchar(512),
+    summary varchar(512),
+    status int,
+    download_count int default 0,
+    is_featured boolean,
+    date_created datetime,
+    date_modified datetime,
+    date_released datetime,
+    allow_mod_distribution boolean,
+    game_popularity_rank int default 0,
+    is_available boolean,
+    thumbs_up_count int default 0,
+    constraint mod_game__fk foreign key (game_id) references game (id),
+    constraint mod_logo__fk foreign key (logo_id) references logo (id),
+    constraint mod_link__fk foreign key (link_id) references link (id),
+    constraint mod_category__fk foreign key (primary_category) references category (id)
+    );
+
 create table if not exists `file`
 (
     id int auto_increment primary key,
@@ -117,6 +144,8 @@ create table if not exists `file`
     expose_as_alternative boolean,
     is_server_pack boolean,
     file_finger_print int,
+    constraint file_game__fk foreign key (game_id) references `game` (id),
+    constraint file_mod__fk foreign key (mod_id) references `mod` (id),
     constraint file_file__fk foreign key (parent_project_file_id) references `file` (id),
     constraint file2_file__fk foreign key (alternate_file_id) references `file` (id)
 
@@ -149,33 +178,6 @@ create table if not exists `file_hash`
     hash_id int,
     constraint file_hash_file__fk foreign key (file_id) references `file` (id),
     constraint file_hash_hash__fk foreign key (hash_id) references `hash` (id)
-    );
-
-create table if not exists `mod`
-(
-    id int auto_increment primary key,
-    game_id int,
-    logo_id int,
-    link_id int,
-    primary_category int,
-    class_id int,
-    name varchar(512),
-    slug varchar(512),
-    summary varchar(512),
-    status int,
-    download_count int default 0,
-    is_featured boolean,
-    date_created datetime,
-    date_modified datetime,
-    date_released datetime,
-    allow_mod_distribution boolean,
-    game_popularity_rank int default 0,
-    is_available boolean,
-    thumbs_up_count int default 0,
-    constraint mod_game__fk foreign key (game_id) references game (id),
-    constraint mod_logo__fk foreign key (logo_id) references logo (id),
-    constraint mod_link__fk foreign key (link_id) references link (id),
-    constraint mod_category__fk foreign key (primary_category) references category (id)
     );
 
 create table if not exists `dependency`

@@ -104,7 +104,7 @@ create table if not exists `mod`
     game_id int,
     logo_id int,
     link_id int,
-    primary_category int,
+    primary_category_id int,
     class_id int,
     name varchar(512),
     slug varchar(512),
@@ -122,7 +122,7 @@ create table if not exists `mod`
     constraint mod_game__fk foreign key (game_id) references game (id),
     constraint mod_logo__fk foreign key (logo_id) references logo (id),
     constraint mod_link__fk foreign key (link_id) references link (id),
-    constraint mod_category__fk foreign key (primary_category) references category (id)
+    constraint mod_category__fk foreign key (primary_category_id) references category (id)
     );
 
 create table if not exists `file`

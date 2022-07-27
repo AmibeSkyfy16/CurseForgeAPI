@@ -1,5 +1,6 @@
 package ch.skyfy.curseforgeapi
 
+import ch.skyfy.curseforgeapi.db.DatabaseManager
 import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -10,9 +11,11 @@ class Tests {
 
     @Test
     fun test2(){
-        for (game in Loader.ALL.games) {
-            println("name: ${game.name}")
-        }
+        val dbManager = DatabaseManager()
+
+//        for (game in Loader.ALL.games) {
+//            println("name: ${game.name}")
+//        }
     }
 
 }

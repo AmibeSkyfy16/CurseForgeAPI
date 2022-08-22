@@ -1,5 +1,6 @@
 package ch.skyfy.curseforgeapi
 
+import com.mysql.cj.xdevapi.JsonLiteral
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
@@ -21,10 +22,59 @@ object Loader {
 
     private val client = OkHttpClient()
 
-    val ALL: All
+//    val ALL: All
 
     init {
-        ALL = All(getAllGames())
+//        ALL = All(getAllGames())
+
+        getAllMods()
+    }
+
+    private fun getAllMods(){
+        val request: Request = Request.Builder()
+            .url("https://api.curseforge.com/v1/mods/search?gameId=432&index=0&gameVersion=1.19.2&modLoaderType=4")
+            .header("x-api-key", "\$2a\$10\$95lNJc48L3s.J0x/OkH7lOwZ85Zr95OTMjcuijXxTCUIGhB9GQjju")
+            .build()
+
+        val response = client.newCall(request).execute()
+
+        try {
+            val el: JsonElement = json.parseToJsonElement(response.body.string())
+            val data = el.jsonObject["data"]!!
+
+            data.jsonArray.forEach {
+                val curseforgeId = it.jsonObject["id"]?.jsonPrimitive?.content!!.toInt()
+                val websiteUrl = it.jsonObject["links"]?.jsonObject?.get("sourceUrl")?.jsonPrimitive?.content!!
+                val sourceUrl = it.jsonObject["links"]?.jsonObject?.get("websiteUrl")?.jsonPrimitive?.content!!
+                getAllModsFiles(curseforgeId)
+                println(it)
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun getAllModsFiles(modId: Int){
+        val request: Request = Request.Builder()
+            .url("https://api.curseforge.com/v1/mods/$modId/files")
+            .header("x-api-key", "\$2a\$10\$95lNJc48L3s.J0x/OkH7lOwZ85Zr95OTMjcuijXxTCUIGhB9GQjju")
+            .build()
+
+        val response = client.newCall(request).execute()
+
+        try {
+            val el: JsonElement = json.parseToJsonElement(response.body.string())
+            val data = el.jsonObject["data"]!!
+
+            data.jsonArray.forEach {
+                val loaderType = it.jsonObject["gameVersions"]?.jsonArray?.get(0)?.jsonPrimitive?.content!!
+                val versionName = it.jsonObject["gameVersions"]?.jsonArray?.get(1)?.jsonPrimitive?.content!!
+
+                println(it)
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
     private fun getAllGames(): List<Game> {
